@@ -72,3 +72,4 @@ GROUP BY subscription_status
 SELECT age_group,SUM(purchase_amount) AS Revenue
 FROM customer
 GROUP BY age_group
+ORDER BY Revenue DESC
