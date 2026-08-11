@@ -50,5 +50,25 @@ SELECT customer_segment,COUNT(*) AS "Number of Customers"
 FROM customer_segment
 GROUP BY customer_segment
 --Q8. What are the top 3 most purchased products within each category?
+WITH items_counts AS (
+SELECT category,
+item_purchased,
+COUNT(customer_id) AS total_orders,
+ROW_NUMBER() OVER(PARTITION BY category ORDER BY COUNT(customer_id) DESC) AS item_rank
+FROM customer
+GROUP BY category,item_purchased
+)
+SELECT item_rank,
+category,
+item_purchased,
+total_orders
+FROM items_counts
+WHERE item_rank <= 3
 --Q9. Are customers who are repeat buyers (more than 5 previous purchases) also likely to be subscribers?
+SELECT subscription_status,COUNT(customer_id) AS customer_count
+FROM customer
+GROUP BY subscription_status
 --Q10. What is the revenue contribution of each age group?
+SELECT age_group,SUM(purchase_amount) AS Revenue
+FROM customer
+GROUP BY age_group
